@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: demo-microservice-sync
+  namespace: devops-tools
+spec:
+  destination:
+    namespace: devops-tools
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: argocd/
+    repoURL: git@github.com:fhochleitner/demo-microservice-ci.git
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

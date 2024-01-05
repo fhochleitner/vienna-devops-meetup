@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-microservice
+  namespace: devops-tools
+spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: false
+  generators:
+    - list:
+        elements:
+          - cluster: main
+            url: https://kubernetes.default.svc
+            branch: main
+  template:
+    metadata:
+      name: "demo-microservice-{{cluster}}"
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+      source:
+        # URL of the repository
+        repoURL: git@github.com:fhochleitner/demo-microservice-ci.git
+        # Revision (tag/branch/commit) of the repository (eg HEAD)
+        targetRevision: "{{ branch }}"
+        # Path within the repository where Kubernetes manifests (and/or Helm, Kustomize, Jsonnet resources) are located
+        path: apps/env/{{ cluster }}
+      destination:
+        server: "{{url}}"
+        namespace: "demo-microservice-{{cluster}}"
