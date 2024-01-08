@@ -1,0 +1,157 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: application-updated
+  namespace: events
+spec:
+  template:
+    serviceAccountName: operate-workflow-sa
+  resource:
+    applicationdeleted:
+      version: v1alpha1
+      resource: applications
+      namespace: "devops-tools"
+      group: argoproj.io
+      eventTypes:
+        - DELETE
+      filter:
+        afterStart: true
+    applicationdeployed:
+      eventTypes:
+        - UPDATE
+      group: argoproj.io
+      namespace: "devops-tools"
+      resource: applications
+      version: v1alpha1
+      filter:
+        afterStart: true
+        fields:
+          - key: status.health.status
+            operation: "=="
+            value: Healthy
+        labels:
+          - key: generated
+            operation: "=="
+            value: "true"
+    applicationcreated:
+      eventTypes:
+        - ADD
+      group: argoproj.io
+      namespace: "devops-tools"
+      resource: applications
+      version: v1alpha1
+      filter:
+        afterStart: true
+        labels:
+          - key: generated
+            operation: "=="
+            value: "true"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: application-deployed
+  namespace: events
+spec:
+  dependencies:
+    - name: application-deployed
+      eventSourceName: application-updated
+      eventName: applicationdeployed
+    - name: application-created
+      eventSourceName: application-updated
+      eventName: applicationcreated
+  template:
+    serviceAccountName: operate-workflow-sa
+  triggers:
+    - template:
+        conditions: "application-deployed && application-created"
+        name: templated-workflow-trigger
+        k8s:
+          operation: create
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: executing-integrationtests-
+                namespace: builds
+              spec:
+                serviceAccountName: operate-workflow-sa
+                entrypoint: integration-test
+                arguments:
+                  parameters:
+                  - name: application
+                    value: "gets set from playload"
+                templates:
+                  - name: integration-test
+                    dag:
+                      tasks:
+                        - name: checkout-code
+                          template: checkout-code
+                        - name: wait-for-deployment
+                          template: wait-for-deployment
+                        - name: executing-integration-test
+                          template: executing-integration-test
+                          depends: "checkout-code && wait-for-deployment"
+                  - name: checkout-code
+                    container:
+                      image: docker/whalesay:latest
+                      command: [cowsay]
+                      args: ["dummy checkout code"]
+                  - name: wait-for-deployment
+                    container:
+                      image: docker/whalesay:latest
+                      command: [ cowsay ]
+                      args: [ "waiting for deployment of application" ]
+                  - name: executing-integration-test
+                    container:
+                      image: docker/whalesay:latest
+                      command: [ cowsay ]
+                      args: [ "executing integration tests" ]
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: application-deletion
+  namespace: events
+spec:
+  dependencies:
+    - name: application-deleted
+      eventSourceName: application-updated
+      eventName: applicationdeleted
+  template:
+    serviceAccountName: operate-workflow-sa
+  triggers:
+    - template:
+        conditions: application-deleted
+        name: templated-workflow-trigger
+        k8s:
+          operation: create
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: delete-namespace-
+                namespace: builds
+              spec:
+                serviceAccountName: operate-workflow-sa
+                entrypoint: execute-command
+                arguments:
+                  parameters:
+                    - name: namespace
+                      default: "empty"
+                templates:
+                  - name: execute-command
+                    inputs:
+                      parameters:
+                        - name: namespace
+                    container:
+                      image: ghcr.io/gepaplexx/kubectl-oc:4.12
+                      command: ["bash", "-c"]
+                      args: ["kubectl delete ns {{ inputs.parameters.namespace }}"]
+          parameters:
+            - src:
+                dependencyName: application-deleted
+                dataKey: body.spec.destination.namespace
+              dest: spec.arguments.parameters.0.value

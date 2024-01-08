@@ -1,0 +1,771 @@
+{
+  "type": "UPDATE",
+  "body": {
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "Application",
+    "metadata": {
+      "creationTimestamp": "2024-01-08T14:27:00Z",
+      "deletionGracePeriodSeconds": 0,
+      "deletionTimestamp": "2024-01-08T14:58:04Z",
+      "finalizers": [
+        "resources-finalizer.argocd.argoproj.io"
+      ],
+      "generation": 32,
+      "labels": {
+        "generated": "true"
+      },
+      "managedFields": [
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:finalizers": {
+                ".": {},
+                "v:\\"
+                resources-finalizer.argocd.argoproj.io
+                \
+                \
+                "": {}
+              },
+              "f:labels": {
+                ".": {},
+                "f:generated": {}
+              },
+              "f:ownerReferences": {
+                ".": {},
+                "k:{\\"
+                uid
+                \
+                \
+                ":\\"
+                53f84907-dae0-44e3-9677-222b6b4972f0
+                \
+                \
+                "}": {}
+              }
+            },
+            "f:spec": {
+              ".": {},
+              "f:destination": {
+                ".": {},
+                "f:namespace": {},
+                "f:server": {}
+              },
+              "f:project": {},
+              "f:source": {
+                ".": {},
+                "f:helm": {
+                  ".": {},
+                  "f:parameters": {}
+                },
+                "f:path": {},
+                "f:repoURL": {},
+                "f:targetRevision": {}
+              },
+              "f:syncPolicy": {
+                ".": {},
+                "f:automated": {
+                  ".": {},
+                  "f:prune": {},
+                  "f:selfHeal": {}
+                },
+                "f:syncOptions": {}
+              }
+            },
+            "f:status": {
+              ".": {},
+              "f:health": {},
+              "f:summary": {},
+              "f:sync": {
+                ".": {},
+                "f:comparedTo": {
+                  ".": {},
+                  "f:destination": {},
+                  "f:source": {}
+                }
+              }
+            }
+          },
+          "manager": "argocd-applicationset-controller",
+          "operation": "Update",
+          "time": "2024-01-08T14:32:46Z"
+        },
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:status": {
+              "f:controllerNamespace": {},
+              "f:health": {
+                "f:status": {}
+              },
+              "f:history": {},
+              "f:operationState": {
+                ".": {},
+                "f:finishedAt": {},
+                "f:message": {},
+                "f:operation": {
+                  ".": {},
+                  "f:initiatedBy": {
+                    ".": {},
+                    "f:automated": {}
+                  },
+                  "f:retry": {
+                    ".": {},
+                    "f:limit": {}
+                  },
+                  "f:sync": {
+                    ".": {},
+                    "f:prune": {},
+                    "f:revision": {},
+                    "f:syncOptions": {}
+                  }
+                },
+                "f:phase": {},
+                "f:startedAt": {},
+                "f:syncResult": {
+                  ".": {},
+                  "f:resources": {},
+                  "f:revision": {},
+                  "f:source": {
+                    ".": {},
+                    "f:helm": {
+                      ".": {},
+                      "f:parameters": {}
+                    },
+                    "f:path": {},
+                    "f:repoURL": {},
+                    "f:targetRevision": {}
+                  }
+                }
+              },
+              "f:reconciledAt": {},
+              "f:resources": {},
+              "f:sourceType": {},
+              "f:summary": {
+                "f:images": {}
+              },
+              "f:sync": {
+                "f:comparedTo": {
+                  "f:destination": {
+                    "f:namespace": {},
+                    "f:server": {}
+                  },
+                  "f:source": {
+                    "f:helm": {
+                      ".": {},
+                      "f:parameters": {}
+                    },
+                    "f:path": {},
+                    "f:repoURL": {},
+                    "f:targetRevision": {}
+                  }
+                },
+                "f:revision": {},
+                "f:status": {}
+              }
+            }
+          },
+          "manager": "argocd-application-controller",
+          "operation": "Update",
+          "time": "2024-01-08T14:58:04Z"
+        }
+      ],
+      "name": "demo-microservice-xyz-3",
+      "namespace": "devops-tools",
+      "ownerReferences": [
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ApplicationSet",
+          "name": "pullrequest-generator",
+          "uid": "53f84907-dae0-44e3-9677-222b6b4972f0"
+        }
+      ],
+      "resourceVersion": "98941",
+      "uid": "86babd72-4b4c-4438-a14d-30dfe732d013"
+    },
+    "spec": {
+      "destination": {
+        "namespace": "demo-microservice-pr-3",
+        "server": "https://kubernetes.default.svc"
+      },
+      "project": "default",
+      "source": {
+        "helm": {
+          "parameters": [
+            {
+              "name": "image.tag",
+              "value": "996dbe7"
+            }
+          ]
+        },
+        "path": "apps/env/main/",
+        "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+        "targetRevision": "main"
+      },
+      "syncPolicy": {
+        "automated": {
+          "prune": true,
+          "selfHeal": true
+        },
+        "syncOptions": [
+          "CreateNamespace=true"
+        ]
+      }
+    },
+    "status": {
+      "controllerNamespace": "devops-tools",
+      "health": {
+        "status": "Progressing"
+      },
+      "history": [
+        {
+          "deployStartedAt": "2024-01-08T14:27:01Z",
+          "deployedAt": "2024-01-08T14:27:03Z",
+          "id": 0,
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "932fab0"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        },
+        {
+          "deployStartedAt": "2024-01-08T14:32:49Z",
+          "deployedAt": "2024-01-08T14:32:50Z",
+          "id": 1,
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        }
+      ],
+      "operationState": {
+        "finishedAt": "2024-01-08T14:32:50Z",
+        "message": "successfully synced (all tasks run)",
+        "operation": {
+          "initiatedBy": {
+            "automated": true
+          },
+          "retry": {
+            "limit": 5
+          },
+          "sync": {
+            "prune": true,
+            "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+            "syncOptions": [
+              "CreateNamespace=true"
+            ]
+          }
+        },
+        "phase": "Succeeded",
+        "startedAt": "2024-01-08T14:32:49Z",
+        "syncResult": {
+          "resources": [
+            {
+              "group": "",
+              "hookPhase": "Running",
+              "kind": "Service",
+              "message": "service/demo-microservice-xyz-3 unchanged",
+              "name": "demo-microservice-xyz-3",
+              "namespace": "demo-microservice-pr-3",
+              "status": "Synced",
+              "syncPhase": "Sync",
+              "version": "v1"
+            },
+            {
+              "group": "apps",
+              "hookPhase": "Running",
+              "kind": "Deployment",
+              "message": "deployment.apps/demo-microservice-xyz-3 configured",
+              "name": "demo-microservice-xyz-3",
+              "namespace": "demo-microservice-pr-3",
+              "status": "Synced",
+              "syncPhase": "Sync",
+              "version": "v1"
+            }
+          ],
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        }
+      },
+      "reconciledAt": "2024-01-08T14:55:37Z",
+      "resources": [
+        {
+          "health": {
+            "message": "Pending deletion",
+            "status": "Progressing"
+          },
+          "kind": "Service",
+          "name": "demo-microservice-xyz-3",
+          "namespace": "demo-microservice-pr-3",
+          "status": "Synced",
+          "version": "v1"
+        },
+        {
+          "group": "apps",
+          "health": {
+            "message": "Pending deletion",
+            "status": "Progressing"
+          },
+          "kind": "Deployment",
+          "name": "demo-microservice-xyz-3",
+          "namespace": "demo-microservice-pr-3",
+          "status": "Synced",
+          "version": "v1"
+        }
+      ],
+      "sourceType": "Helm",
+      "summary": {
+        "images": [
+          "ghcr.io/fhochleitner/demo-microservice:996dbe7"
+        ]
+      },
+      "sync": {
+        "comparedTo": {
+          "destination": {
+            "namespace": "demo-microservice-pr-3",
+            "server": "https://kubernetes.default.svc"
+          },
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        },
+        "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+        "status": "Synced"
+      }
+    }
+  },
+  "oldBody": {
+    "apiVersion": "argoproj.io/v1alpha1",
+    "kind": "Application",
+    "metadata": {
+      "creationTimestamp": "2024-01-08T14:27:00Z",
+      "deletionGracePeriodSeconds": 0,
+      "deletionTimestamp": "2024-01-08T14:58:04Z",
+      "finalizers": [
+        "resources-finalizer.argocd.argoproj.io"
+      ],
+      "generation": 31,
+      "labels": {
+        "generated": "true"
+      },
+      "managedFields": [
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:metadata": {
+              "f:finalizers": {
+                ".": {},
+                "v:\\"
+                resources-finalizer.argocd.argoproj.io
+                \
+                \
+                "": {}
+              },
+              "f:labels": {
+                ".": {},
+                "f:generated": {}
+              },
+              "f:ownerReferences": {
+                ".": {},
+                "k:{\\"
+                uid
+                \
+                \
+                ":\\"
+                53f84907-dae0-44e3-9677-222b6b4972f0
+                \
+                \
+                "}": {}
+              }
+            },
+            "f:spec": {
+              ".": {},
+              "f:destination": {
+                ".": {},
+                "f:namespace": {},
+                "f:server": {}
+              },
+              "f:project": {},
+              "f:source": {
+                ".": {},
+                "f:helm": {
+                  ".": {},
+                  "f:parameters": {}
+                },
+                "f:path": {},
+                "f:repoURL": {},
+                "f:targetRevision": {}
+              },
+              "f:syncPolicy": {
+                ".": {},
+                "f:automated": {
+                  ".": {},
+                  "f:prune": {},
+                  "f:selfHeal": {}
+                },
+                "f:syncOptions": {}
+              }
+            },
+            "f:status": {
+              ".": {},
+              "f:health": {},
+              "f:summary": {},
+              "f:sync": {
+                ".": {},
+                "f:comparedTo": {
+                  ".": {},
+                  "f:destination": {},
+                  "f:source": {}
+                }
+              }
+            }
+          },
+          "manager": "argocd-applicationset-controller",
+          "operation": "Update",
+          "time": "2024-01-08T14:32:46Z"
+        },
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:status": {
+              "f:controllerNamespace": {},
+              "f:health": {
+                "f:status": {}
+              },
+              "f:history": {},
+              "f:operationState": {
+                ".": {},
+                "f:finishedAt": {},
+                "f:message": {},
+                "f:operation": {
+                  ".": {},
+                  "f:initiatedBy": {
+                    ".": {},
+                    "f:automated": {}
+                  },
+                  "f:retry": {
+                    ".": {},
+                    "f:limit": {}
+                  },
+                  "f:sync": {
+                    ".": {},
+                    "f:prune": {},
+                    "f:revision": {},
+                    "f:syncOptions": {}
+                  }
+                },
+                "f:phase": {},
+                "f:startedAt": {},
+                "f:syncResult": {
+                  ".": {},
+                  "f:resources": {},
+                  "f:revision": {},
+                  "f:source": {
+                    ".": {},
+                    "f:helm": {
+                      ".": {},
+                      "f:parameters": {}
+                    },
+                    "f:path": {},
+                    "f:repoURL": {},
+                    "f:targetRevision": {}
+                  }
+                }
+              },
+              "f:reconciledAt": {},
+              "f:resources": {},
+              "f:sourceType": {},
+              "f:summary": {
+                "f:images": {}
+              },
+              "f:sync": {
+                "f:comparedTo": {
+                  "f:destination": {
+                    "f:namespace": {},
+                    "f:server": {}
+                  },
+                  "f:source": {
+                    "f:helm": {
+                      ".": {},
+                      "f:parameters": {}
+                    },
+                    "f:path": {},
+                    "f:repoURL": {},
+                    "f:targetRevision": {}
+                  }
+                },
+                "f:revision": {},
+                "f:status": {}
+              }
+            }
+          },
+          "manager": "argocd-application-controller",
+          "operation": "Update",
+          "time": "2024-01-08T14:55:37Z"
+        }
+      ],
+      "name": "demo-microservice-xyz-3",
+      "namespace": "devops-tools",
+      "ownerReferences": [
+        {
+          "apiVersion": "argoproj.io/v1alpha1",
+          "blockOwnerDeletion": true,
+          "controller": true,
+          "kind": "ApplicationSet",
+          "name": "pullrequest-generator",
+          "uid": "53f84907-dae0-44e3-9677-222b6b4972f0"
+        }
+      ],
+      "resourceVersion": "98931",
+      "uid": "86babd72-4b4c-4438-a14d-30dfe732d013"
+    },
+    "spec": {
+      "destination": {
+        "namespace": "demo-microservice-pr-3",
+        "server": "https://kubernetes.default.svc"
+      },
+      "project": "default",
+      "source": {
+        "helm": {
+          "parameters": [
+            {
+              "name": "image.tag",
+              "value": "996dbe7"
+            }
+          ]
+        },
+        "path": "apps/env/main/",
+        "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+        "targetRevision": "main"
+      },
+      "syncPolicy": {
+        "automated": {
+          "prune": true,
+          "selfHeal": true
+        },
+        "syncOptions": [
+          "CreateNamespace=true"
+        ]
+      }
+    },
+    "status": {
+      "controllerNamespace": "devops-tools",
+      "health": {
+        "status": "Healthy"
+      },
+      "history": [
+        {
+          "deployStartedAt": "2024-01-08T14:27:01Z",
+          "deployedAt": "2024-01-08T14:27:03Z",
+          "id": 0,
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "932fab0"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        },
+        {
+          "deployStartedAt": "2024-01-08T14:32:49Z",
+          "deployedAt": "2024-01-08T14:32:50Z",
+          "id": 1,
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        }
+      ],
+      "operationState": {
+        "finishedAt": "2024-01-08T14:32:50Z",
+        "message": "successfully synced (all tasks run)",
+        "operation": {
+          "initiatedBy": {
+            "automated": true
+          },
+          "retry": {
+            "limit": 5
+          },
+          "sync": {
+            "prune": true,
+            "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+            "syncOptions": [
+              "CreateNamespace=true"
+            ]
+          }
+        },
+        "phase": "Succeeded",
+        "startedAt": "2024-01-08T14:32:49Z",
+        "syncResult": {
+          "resources": [
+            {
+              "group": "",
+              "hookPhase": "Running",
+              "kind": "Service",
+              "message": "service/demo-microservice-xyz-3 unchanged",
+              "name": "demo-microservice-xyz-3",
+              "namespace": "demo-microservice-pr-3",
+              "status": "Synced",
+              "syncPhase": "Sync",
+              "version": "v1"
+            },
+            {
+              "group": "apps",
+              "hookPhase": "Running",
+              "kind": "Deployment",
+              "message": "deployment.apps/demo-microservice-xyz-3 configured",
+              "name": "demo-microservice-xyz-3",
+              "namespace": "demo-microservice-pr-3",
+              "status": "Synced",
+              "syncPhase": "Sync",
+              "version": "v1"
+            }
+          ],
+          "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        }
+      },
+      "reconciledAt": "2024-01-08T14:55:37Z",
+      "resources": [
+        {
+          "health": {
+            "status": "Healthy"
+          },
+          "kind": "Service",
+          "name": "demo-microservice-xyz-3",
+          "namespace": "demo-microservice-pr-3",
+          "status": "Synced",
+          "version": "v1"
+        },
+        {
+          "group": "apps",
+          "health": {
+            "status": "Healthy"
+          },
+          "kind": "Deployment",
+          "name": "demo-microservice-xyz-3",
+          "namespace": "demo-microservice-pr-3",
+          "status": "Synced",
+          "version": "v1"
+        }
+      ],
+      "sourceType": "Helm",
+      "summary": {
+        "images": [
+          "ghcr.io/fhochleitner/demo-microservice:996dbe7"
+        ]
+      },
+      "sync": {
+        "comparedTo": {
+          "destination": {
+            "namespace": "demo-microservice-pr-3",
+            "server": "https://kubernetes.default.svc"
+          },
+          "source": {
+            "helm": {
+              "parameters": [
+                {
+                  "name": "image.tag",
+                  "value": "996dbe7"
+                }
+              ]
+            },
+            "path": "apps/env/main/",
+            "repoURL": "git@github.com:fhochleitner/demo-microservice-ci.git",
+            "targetRevision": "main"
+          }
+        },
+        "revision": "4fe43a41c41db8cc1bfaa9ff6ba7c227c87e0fe7",
+        "status": "Synced"
+      }
+    }
+  },
+  "group": "argoproj.io",
+  "version": "v1alpha1",
+  "resource": "applications"
+}","sensorName":"application-deployed","triggerName":"echo-event","triggerType":"Log","dependencyName":"application-deployed","eventContext":"{
+  "id:"
+  "66646337373037382d336333322d346465642d383632612d353366383964383432353439",
+  "source": "application-updated",
+  "specversion": "1.0",
+  "type": "resource",
+  "datacontenttype": "application/json",
+  "subject": "applicationdeployed",
+  "time": "2024-01-08 14:58:04.787997734 +0000 UTC"
+}"}

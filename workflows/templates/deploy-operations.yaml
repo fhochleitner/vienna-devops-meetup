@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: deploy-operations
+spec:
+  workflowMetadata:
+    labels:
+      app: argo
+      clusterworkflowtemplate: deploy-operations
+  templates:
+    - name: deploy-from-to
+      metadata:
+        labels:
+          template: deploy-from-to
+      synchronization:
+        mutex:
+          name: "argo-{{ workflow.parameters.reponame }}"
+      container:
+        name: git-workflows
+        image: ghcr.io/gepaplexx/go-git-workflows:latest
+        command:
+          - "git-workflows"
+        args:
+          - deploy
+          - --url
+          - '{{ workflow.parameters.repository }}'
+          - --from-branch
+          - '{{workflow.parameters.source }}'
+          - --to-branch
+          - '{{ workflow.parameters.target }}'
+          - --name
+          - '{{ workflow.parameters.reponame }}'
+          - "--resources-only={{=sprig.trimAll('[]', workflow.parameters.resourcesOnly) }}"
+        volumeMounts:
+          - name: workspace
+            mountPath: /mnt/out/
+          - name: pipeline-secrets
+            mountPath: /workflow/.ssh/known_hosts
+            subPath: known_hosts
+          - name: pipeline-secrets
+            mountPath: /workflow/.ssh/id_rsa
+            subPath: id_rsa
+      volumes:
+        - name: workspace
+          emptyDir: {}

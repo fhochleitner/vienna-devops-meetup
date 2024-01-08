@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: git-operations
+spec:
+  workflowMetadata:
+    labels:
+      app: argo
+      clusterworkflowtemplate: git-operations
+  templates:
+    - name: checkout
+      metadata:
+        labels:
+          template: checkout
+      container:
+        name: git-workflows
+        image: ghcr.io/gepaplexx/go-git-workflows:latest
+        command:
+          - "git-workflows"
+        args:
+          - checkout
+          - --url
+          - '{{ workflow.parameters.repository }}'
+          - --branch
+          - '{{ workflow.parameters.branch }}'
+          - --name
+          - '{{ workflow.parameters.reponame }}'
+        volumeMounts:
+          - name: workspace
+            mountPath: /mnt/out/
+          - name: pipeline-secrets
+            mountPath: /workflow/.ssh/known_hosts
+            subPath: known_hosts
+          - name: pipeline-secrets
+            mountPath: /workflow/.ssh/id_rsa
+            subPath: id_rsa

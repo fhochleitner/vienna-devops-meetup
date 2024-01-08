@@ -1,0 +1,88 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: maven-operations
+spec:
+  workflowMetadata:
+    labels:
+      app: argo
+      clusterworkflowtemplate: maven-operations
+  templates:
+    - name: build
+      metadata:
+        labels:
+          template: build
+      inputs:
+        parameters:
+          - name: args
+          - name: config
+          - name: config-path
+          - name: options
+      container:
+        name: maven
+        image: ghcr.io/gepaplexx/maven:{{ workflow.parameters.build-type-version }}-{{ workflow.parameters.language-version }}
+        command:
+          - "/usr/bin/mvn-wrapper.sh"
+        args:
+          - "{{ inputs.parameters.args }}"
+          - "{{ inputs.parameters.options }}"
+          - "-f"
+          - "/mnt/out/{{ workflow.parameters.reponame }}/{{ inputs.parameters.config-path }}/{{ inputs.parameters.config }}"
+          - "-Dmaven.repo.local=/cache/{{ workflow.parameters.environment }}"
+        volumeMounts:
+          - name: workspace
+            mountPath: /mnt/out/
+          - name: pipeline-secrets
+            mountPath: /root/.m2/settings.xml
+            subPath: maven-settings.xml
+          - name: cache
+            mountPath: "/cache/"
+    - name: run-sonarqube-analysis
+      metadata:
+        labels:
+          template: run-sonarqube-analysis
+      inputs:
+        parameters:
+          - name: config
+          - name: config-path
+          - name: options
+      container:
+        name: maven
+        image: ghcr.io/gepaplexx/maven:{{ workflow.parameters.build-type-version }}-{{ workflow.parameters.language-version }}
+        command:
+          - "/usr/bin/mvn-wrapper.sh"
+        args:
+          - "version"
+        env:
+          - name: SONAR_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: workflow-{{ workflow.parameters.reponame }}
+                key: sonar-login
+                optional: true
+        volumeMounts:
+          - name: workspace
+            mountPath: /mnt/out/
+          - name: pipeline-secrets
+            mountPath: /root/.m2/settings.xml
+            subPath: maven-settings.xml
+          - name: cache
+            mountPath: "/cache/"
+          - name: sonar-cache
+            mountPath: "/.sonar/"
+      volumes:
+        - name: sonar-cache
+          emptyDir: { }
+    - name: cleanup-local-repository
+      metadata:
+        labels:
+          template: cleanup-local-repository
+      script:
+        image: alpine:3.6
+        command: [ sh ]
+        source: |
+          set -ex
+          rm -rf /cache/{{ workflow.parameters.environment }}
+        volumeMounts:
+          - name: cache
+            mountPath: "/cache/"

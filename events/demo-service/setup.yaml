@@ -1,0 +1,30 @@
+############################################################
+## ServiceAccount
+############################################################
+apiVersion: v1
+kind: Secret
+metadata:
+  name: operate-workflow-sa-token
+  namespace: builds
+  annotations:
+    kubernetes.io/service-account.name: operate-workflow-sa
+type: kubernetes.io/service-account-token
+---
+############################################################
+## PERSISTENTVOLUMECLAIM
+############################################################
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cache-demo-microservice
+  namespace: builds
+  labels:
+    disable_prediction: "true"
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+---
