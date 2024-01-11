@@ -18,8 +18,8 @@ spec:
         method: "POST"
       events:
         - "push"
-#        - "create"
-#        - "delete"
+        - "create"
+        - "delete"
       webhookSecret:
         name: workflow-demo-microservice
         key: webhook-secret

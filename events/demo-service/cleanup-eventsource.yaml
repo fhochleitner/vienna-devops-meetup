@@ -7,15 +7,6 @@ spec:
   template:
     serviceAccountName: operate-workflow-sa
   resource:
-    applicationdeleted:
-      version: v1alpha1
-      resource: applications
-      namespace: "devops-tools"
-      group: argoproj.io
-      eventTypes:
-        - DELETE
-      filter:
-        afterStart: true
     applicationdeployed:
       eventTypes:
         - UPDATE
@@ -109,49 +100,3 @@ spec:
                       command: [ cowsay ]
                       args: [ "executing integration tests" ]
 ---
-apiVersion: argoproj.io/v1alpha1
-kind: Sensor
-metadata:
-  name: application-deletion
-  namespace: events
-spec:
-  dependencies:
-    - name: application-deleted
-      eventSourceName: application-updated
-      eventName: applicationdeleted
-  template:
-    serviceAccountName: operate-workflow-sa
-  triggers:
-    - template:
-        conditions: application-deleted
-        name: templated-workflow-trigger
-        k8s:
-          operation: create
-          source:
-            resource:
-              apiVersion: argoproj.io/v1alpha1
-              kind: Workflow
-              metadata:
-                generateName: delete-namespace-
-                namespace: builds
-              spec:
-                serviceAccountName: operate-workflow-sa
-                entrypoint: execute-command
-                arguments:
-                  parameters:
-                    - name: namespace
-                      default: "empty"
-                templates:
-                  - name: execute-command
-                    inputs:
-                      parameters:
-                        - name: namespace
-                    container:
-                      image: ghcr.io/gepaplexx/kubectl-oc:4.12
-                      command: ["bash", "-c"]
-                      args: ["kubectl delete ns {{ inputs.parameters.namespace }}"]
-          parameters:
-            - src:
-                dependencyName: application-deleted
-                dataKey: body.spec.destination.namespace
-              dest: spec.arguments.parameters.0.value

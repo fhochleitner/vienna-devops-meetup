@@ -19,7 +19,7 @@ spec:
         name: workspace
       spec:
         accessModes:
-          - ReadWriteonce
+          - ReadWriteOnce
         resources:
           requests:
             storage: 1Gi # TODO siehe https://github.com/argoproj/argo-workflows/discussions/9738
@@ -146,16 +146,6 @@ spec:
               parameters:
                 - name: command
                   value: "echo '{{ tasks.delete-environment-infra-repository.outputs.parameters.application }}' | oc apply -f -"
-          - name: delete-project
-            depends: "delete-application || delete-application.Failed" # continue on failure because application already deleted
-            templateRef:
-              name: k8s-operations
-              template: execute-command
-              clusterScope: true
-            arguments:
-              parameters:
-                - name: command
-                  value: "oc delete project {{ workflow.parameters.reponame }}-{{ workflow.parameters.environment }}"
           - name: cleanup-local-repository
             templateRef:
               name: maven-operations

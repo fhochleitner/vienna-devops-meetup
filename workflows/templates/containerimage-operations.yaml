@@ -93,7 +93,7 @@ spec:
           - "--cache-dir=/tmp/trivy/cache/"
           - "--ignore-unfixed"
           - "--output=/mnt/out/{{ workflow.parameters.reponame }}/{{ workflow.parameters.commit-hash }}/trivy.html"
-          - "{{ inputs.parameters.registry }}/{{ inputs.parameters.repository }}/{{ workflow.parameters.reponame }}:{{ workflow.parameters.commit-hash }}-to-scan"
+          - "{{ inputs.parameters.registry }}/{{ inputs.parameters.repository }}/{{ workflow.parameters.reponame }}:{{ workflow.parameters.commit-hash }}"
         volumeMounts:
           - name: cache
             mountPath: /tmp/trivy/cache
@@ -121,7 +121,7 @@ spec:
           - "--ignore-unfixed"
           - "--cache-dir=/tmp/trivy/cache/"
           - "--exit-code=1"
-          - "{{ inputs.parameters.registry }}/{{ inputs.parameters.repository }}/{{ workflow.parameters.reponame }}:{{ workflow.parameters.commit-hash }}-to-scan"
+          - "{{ inputs.parameters.registry }}/{{ inputs.parameters.repository }}/{{ workflow.parameters.reponame }}:{{ workflow.parameters.commit-hash }}"
         volumeMounts:
           - name: cache
             mountPath: /tmp/trivy/cache

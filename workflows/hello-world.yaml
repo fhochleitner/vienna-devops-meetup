@@ -3,16 +3,38 @@ kind: Workflow
 metadata:
   generateName: hello-world-
   namespace: builds
-  labels:
-    workflows.argoproj.io/archive-strategy: "false"
   annotations:
     workflows.argoproj.io/description: |
-      This is a simple hello world example.
+      A simple workflow example to get started
 spec:
   serviceAccountName: operate-workflow-sa
-  entrypoint: whalesay
+  entrypoint: simple-workflow
   templates:
+  - name: simple-workflow
+    steps:
+      - - name: task-a
+          template: whalesay
+          arguments:
+            parameters:
+              - name: message
+                value: "task-a"
+      - - name: task-b
+          template: whalesay
+          arguments:
+            parameters:
+            - name: message
+              value: "task-b"
+        - name: parallel-task
+          template: whalesay
+          arguments:
+            parameters:
+            - name: message
+              value: "parallel-task"
   - name: whalesay
+    inputs:
+      parameters:
+        - name: message
+          value: "hello world"
     container:
       image: docker/whalesay:latest
       command: [cowsay]

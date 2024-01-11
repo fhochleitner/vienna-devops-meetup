@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: hello-world-
+  namespace: builds
+  annotations:
+    workflows.argoproj.io/description: |
+      A simple workflow example to get started
+spec:
+  serviceAccountName: operate-workflow-sa
+  entrypoint: simple-workflow
+  templates:
+    - name: simple-workflow
+      steps:
+        - - name: task-a
+            template: whalesay
+            arguments:
+              parameters:
+                - name: message
+                  value: "task-a"
+        - - name: task-b
+            template: whalesay
+          - name: parallel-task
+            template: whalesay
+    - name: whalesay
+      inputs:
+        parameters:
+          - name: message
+            value: "hello world"
+      container:
+        image: docker/whalesay:latest
+        command: [cowsay]
+        args: ["hello world"]

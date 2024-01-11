@@ -17,6 +17,7 @@ spec:
             value:
               - "push"
               - "delete"
+              - "create"
   triggers:
     - template:
         name: demo-microservice-event-trigger

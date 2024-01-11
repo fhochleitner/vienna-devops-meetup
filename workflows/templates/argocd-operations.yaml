@@ -52,17 +52,17 @@ spec:
       metadata:
         labels:
           template: sync-argocd-application
-        annotations:
-          vault.hashicorp.com/agent-inject: 'true'
-          vault.hashicorp.com/agent-run-as-same-user: 'true'
-          vault.hashicorp.com/role: cicd-reader
-          vault.hashicorp.com/service: 'https://vault.play.run.gepardec.com/'
-          vault.hashicorp.com/agent-inject-secret-argo-access: development/admin/argo-access
-          vault.hashicorp.com/agent-inject-template-argo-access: |
-            {{ with secret "development/admin/argo-access" -}}
-              export ARGOCD_URL={{ .Data.data.ARGOCD_URL }}
-            export PASSWORD={{ .Data.data.ARGOCD_PASSWORD }}
-            {{- end }}
+#        annotations:
+#          vault.hashicorp.com/agent-inject: 'true'
+#          vault.hashicorp.com/agent-run-as-same-user: 'true'
+#          vault.hashicorp.com/role: cicd-reader
+#          vault.hashicorp.com/service: 'https://vault.play.run.gepardec.com/'
+#          vault.hashicorp.com/agent-inject-secret-argo-access: development/admin/argo-access
+#          vault.hashicorp.com/agent-inject-template-argo-access: |
+#            {{ with secret "development/admin/argo-access" -}}
+#              export ARGOCD_URL={{ .Data.data.ARGOCD_URL }}
+#            export PASSWORD={{ .Data.data.ARGOCD_PASSWORD }}
+#            {{- end }}
       inputs:
         parameters:
           - name: application
@@ -74,8 +74,7 @@ spec:
           
           set -e
           application={{ inputs.parameters.application }}
-          source /vault/secrets/argo-access 
-          argocd login $ARGOCD_URL --username admin --password $PASSWORD --config /home/argocd/.config/credentials && \
+          argocd login argocd-server.devops-tools.svc.cluster.local:80 --username admin --password gc7kXb8L9SN0C9Hz --config /home/argocd/.config/credentials && \
           argocd app sync "${application}" --config /home/argocd/.config/credentials || exit 0
 
     - name: create-environment-infra-repository
